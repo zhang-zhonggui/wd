@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<style>
+    fieldset {
+        width: 600px;
+        margin: 100px auto;
+        border: 3px solid green;
+        border-radius: 25px;
+    }
+</style>
+<body>
+<div id="app">
+    <fieldset>
+        <legend>登录</legend>
+        <span class="btn btn-danger">{{msg}}</span>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">账号</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="请输入账号" v-model="info.username">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" placeholder="请输入密码" v-model="info.password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button @click="login()" class="btn btn-default">登录</button>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            info: {},
+            msg: "",
+        },
+        methods:{
+            login:function () {
+                $.post("/maven/admin/login", vm.info, function (backData) {
+                    if(backData.code == 50001){
+                        vm.msg = backData.msg;
+                    }else if(backData.code == 20001){
+                        window.location.href = "/maven/main.html";
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+
+</body>
+</html>

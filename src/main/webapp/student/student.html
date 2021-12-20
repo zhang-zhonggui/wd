@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="jumbotron" style="margin: 0 auto; text-align: center">
+        <h1>student表</h1>
+        <p>增删改查</p>
+        <p><a class="btn btn-primary btn-lg" href="/maven/student/addstu.html">添加</a></p>
+    </div>
+    <table class="table table-bordered table-hover active table-responsive">
+        <tr>
+            <td>id</td>
+            <td>name</td>
+            <td>age</td>
+            <td>address</td>
+            <td>grade</td>
+            <td>操作</td>
+        </tr>
+        <tr v-for="(s,i) in students">
+            <td>{{s.id}}</td>
+            <td>{{s.name}}</td>
+            <td>{{s.age}}</td>
+            <td>{{s.address}}</td>
+            <td>{{s.grade}}</td>
+            <td><a type="button" v-bind:href=" '/maven/student/updatestudent.html?id=' + s.id">修改</a>
+                <button @Click="delStu(s.id)" type="button" class="btn btn-danger">删除</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    $.get("/maven/stu/list", function (backData) {
+        vm.students = backData.data;
+        console.log(vm.students)
+    })
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            students: [],
+        },
+        methods: {
+            delStu:function (id) {
+               if (confirm("真的删除吗")){
+                   $.get("/maven/stu/delStu?id="+id,function (backData) {
+                       if (backData.code == 200){
+                           window.location.reload()
+                       }else {
+                           alert("删除失败")
+                       }
+                   })
+               }
+            }
+        },
+    });
+</script>
+</body>
+</html>
